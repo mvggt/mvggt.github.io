@@ -527,12 +527,17 @@
                           style="width: 90%; height: 90%; background: #ffffff; margin: 0 auto;">
             </model-viewer>
           </div>
+          <div class="content has-text-centered">
+            <p id="wild-text" style="font-size: 1.2rem; font-weight: bold;">
+              It is a 3-seater sofa. Its upholstery is light beige. It has seat and back cushions, and black metal legs.
+            </p>
+          </div>
           <br>
           <div class="content has-text-centered">
             <div class="thumbnail-container" id="thumbnail-wild">
-              <video src="resources/in_the_wild/1.mp4" data-glb="resources/in_the_wild/1-true.glb" loop playsinline muted></video>
-              <video src="resources/in_the_wild/2.mp4" data-glb="resources/in_the_wild/2-true.glb" loop playsinline muted></video>
-              <video src="resources/in_the_wild/3.mp4" data-glb="resources/in_the_wild/3-true.glb" loop playsinline muted></video>
+              <video src="resources/in_the_wild/1.mp4" data-glb="resources/in_the_wild/1-true.glb" data-text="It is a 3-seater sofa. Its upholstery is light beige. It has seat and back cushions, and black metal legs." loop playsinline muted></video>
+              <video src="resources/in_the_wild/2.mp4" data-glb="resources/in_the_wild/2-true.glb" data-text="It is a desk with a yellow tabletop. It has a metal frame (silver-colored) and a lower yellow storage shelf." loop playsinline muted></video>
+              <video src="resources/in_the_wild/3.mp4" data-glb="resources/in_the_wild/3-true.glb" data-text="It is a bed with a black tufted headboard. The bedspread is white with black decorative patterns. There are items (such as dolls) placed on the bed." loop playsinline muted></video>
             </div>  
           </div>
           <script>
@@ -544,16 +549,31 @@
                 if (firstWildThumbnail.tagName.toLowerCase() === 'video') {
                   firstWildThumbnail.play();
                 }
+                // Update the text description
+                const text = firstWildThumbnail.getAttribute('data-text');
+                if (text) {
+                  const textContainer = document.getElementById('wild-text');
+                  if (textContainer) {
+                    textContainer.innerText = text;
+                  }
+                }
               }
 
               document.querySelectorAll('#thumbnail-wild img, #thumbnail-wild video').forEach(el => {
                 el.addEventListener('click', () => {
                   const glbSrc = el.getAttribute('data-glb');
+                  const text = el.getAttribute('data-text');
+                  
                   const modelViewer = document.getElementById('WildResult');
                   modelViewer.setAttribute('src', glbSrc);
                   modelViewer.cameraOrbit = "180deg 70deg auto";
                   modelViewer.resetTurntableRotation(0);
                   modelViewer.jumpCameraToGoal();
+                  
+                  const textContainer = document.getElementById('wild-text');
+                  if (textContainer && text) {
+                    textContainer.innerText = text;
+                  }
 
                   document.querySelectorAll('#thumbnail-wild img, #thumbnail-wild video').forEach(element => {
                       element.classList.remove('thumbnail-selected');
